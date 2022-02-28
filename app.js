@@ -1,30 +1,43 @@
-/* 
-boxes are target elements which I refered to as persons 
-I change their bg color (but you can do whatever you want to) when they are visisble in the viewport.
-*/
-const boxes = document.querySelectorAll(".box");
+const main = document.querySelector(".main");
+const target = document.querySelector(".target");
 
-/*
-observer was refererd to as watcher 
-*/
-const observerOptions = {
-  threshold: 0.5,
-};
-const observer = new IntersectionObserver(observerCallback, observerOptions);
+let previousY = 0;
+let previousRatio = 0;
 
-function observerCallback(entries) {
-  // entries are boxes we targeted
-  // we loop over each targted element(a box) to apply actions we want to them
-  entries.forEach((entry) => {
-    // here we will change bg color of targeted element(a box) if it is visible in the viewport
-    const box = entry.target;
-    if (entry.isIntersecting) {
-      box.classList.add("show");
-    } else {
-      box.classList.remove("show");
-    }
-  });
-}
+const thresholdArray = steps => Array(steps + 1)
+ .fill(0)
+ .map((_, index) => index / steps || 0)
 
-// now, the observer(watcher) watches all boxes(persons)
-boxes.forEach((box) => observer.observe(box));
+const observer = new IntersectionObserver(
+  function (entries) {
+    entries.forEach((entry) => {
+      const currentY = entry.boundingClientRect.y;
+      const currentRatio = entry.intersectionRatio;
+      const isIntersecting = entry.isIntersecting;
+
+  
+      if (currentY < previousY) {
+        if (currentRatio > previousRatio && isIntersecting) {
+          console.log("Scrolling down enter");
+        } else {
+          console.log("Scrolling down leave");
+        }
+      } else if (currentY > previousY && isIntersecting) {
+        if (currentRatio < previousRatio) {
+          console.log("Scrolling up leave");
+        } else {
+          console.log("Scrolling up enter");
+        }
+      }
+
+      previousY = currentY;
+      previousRatio = currentRatio;
+    });
+  },
+  {
+    root: main,
+    threshold: thresholdArray(20)
+  }
+);
+
+observer.observe(target);

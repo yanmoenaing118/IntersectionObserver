@@ -12,15 +12,42 @@ body {
   color: #fff;
 }
 .box {
-  margin: 0 auto;
-  width: 300px;
-  height: 300px;
-  background-color: transparent;
-  margin-top: 3em;
-
-  transition: all 1.6s ease;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .show {
   background-color: pink;
+}
+
+.main {
+  height: 480px;
+  overflow-y: scroll;
+}
+
+.main > section {
+  height: 460px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+
+footer {
+  height: 100vh;
+  background-color: #4fc3f7;
+}
+
+.box-target {
+  transform: translateY(50px) scale(0);
+  transition: all .2s ease-out;
+  opacity: 0;
+}
+
+.initial {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
